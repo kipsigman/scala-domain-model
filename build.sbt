@@ -1,10 +1,7 @@
 import Dependencies._
 
 name := """scala-domain-model"""
-
 organization := "kipsigman"
-
-version := "0.1.0"
 
 scalaVersion := "2.11.7"
 
@@ -15,3 +12,7 @@ libraryDependencies ++= Seq(
 )
 
 dependencyOverrides += "com.typesafe.play" %% "play-jdbc-api" % playVersion
+
+licenses += ("Apache-2.0", url("https://github.com/kipsigman/scala-domain-model/blob/master/LICENSE"))
+homepage := Some(url("https://github.com/kipsigman/scala-domain-model"))
+scmInfo := Some(ScmInfo(url("https://github.com/kipsigman/scala-domain-model"), "scm:git:git://github.com:kipsigman/scala-domain-model.git"))
