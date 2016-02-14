@@ -5,7 +5,7 @@ Framework for a domain model in Scala. Includes base entities and DAO utilities.
 Add the following to your `build.sbt` file:
 
 ```scala
-resolvers += Resolver.url("bintray-kipsigman-maven", url("http://dl.bintray.com/kipsigman/maven"))(Resolver.ivyStylePatterns)
+resolvers += Resolver.bintrayRepo("kipsigman", "maven")
 
-libraryDependencies += "kipsigman" %% "scala-domain-model" % "0.1.1"
+libraryDependencies += "kipsigman" %% "scala-domain-model" % "0.1.2"
 ```
