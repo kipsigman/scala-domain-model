@@ -7,5 +7,5 @@ Add the following to your `build.sbt` file:
 ```scala
 resolvers += Resolver.bintrayRepo("kipsigman", "maven")
 
-libraryDependencies += "kipsigman" %% "scala-domain-model" % "0.1.3"
+libraryDependencies += "kipsigman" %% "scala-domain-model" % "0.1.4"
 ```
