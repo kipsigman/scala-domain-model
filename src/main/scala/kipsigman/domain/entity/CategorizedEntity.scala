@@ -15,7 +15,7 @@ trait CategorizedEntity {
   /**
    * All categories
    */
-  final def categories: Set[Category] = secondaryCategories + category
+  def categories: Set[Category] = secondaryCategories + category
   
   /**
    * Primary category followed by sorted secondary categories
