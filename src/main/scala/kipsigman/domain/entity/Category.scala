@@ -8,8 +8,11 @@ import play.api.data.Mapping
 import play.api.mvc.PathBindable
 import play.api.mvc.QueryStringBindable
 
-abstract class Category(val name: String, val order: Int) {
-  // URL friendly path
+case class Category(
+  id: Option[Int] = None,
+  name: String,
+  order: Int) extends IdEntity {
+  
   def path: String = name
   
   override def toString: String = name
