@@ -15,6 +15,8 @@ case class Image(
   val fileExtension: String = Image.fileExtension(mimeType)
   
   val filename: Option[String] = id.map(definedId => Image.filename(definedId, fileExtension))
+  
+  val thumbnailFilename: Option[String] = id.map(definedId => Image.thumbnailFilename(definedId, fileExtension))
 }
 
 object Image {
@@ -26,4 +28,6 @@ object Image {
   }
   
   def filename(id: Int, fileExtension: String): String = s"${id}.${fileExtension}"
+  
+  def thumbnailFilename(id: Int, fileExtension: String): String = s"${id}-thumbnail.${fileExtension}"
 }

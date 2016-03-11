@@ -4,6 +4,7 @@ import scala.concurrent.Future
 
 import kipsigman.domain.entity.Content.ContentClass
 import kipsigman.domain.entity.ContentImage
+import kipsigman.domain.entity.ContentImage.DisplayType
 import kipsigman.domain.entity.Image
 
 trait ImageRepository {
@@ -18,6 +19,10 @@ trait ImageRepository {
   def findContentImage(contentClass: ContentClass, contentId: Int, imageId: Int): Future[Option[ContentImage]]
   
   def findContentImages(contentClass: ContentClass, contentId: Int): Future[Seq[ContentImage]]
+  
+  def findContentImages(contentClass: ContentClass, contentIds: Set[Int]): Future[Seq[ContentImage]]
+  
+  def findContentImages(contentClass: ContentClass, contentIds: Set[Int], displayType: DisplayType): Future[Seq[ContentImage]]
   
   def saveContentImage(contentClass: ContentClass, entity: ContentImage): Future[ContentImage]
 }

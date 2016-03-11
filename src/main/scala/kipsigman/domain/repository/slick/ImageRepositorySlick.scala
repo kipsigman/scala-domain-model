@@ -7,6 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kipsigman.domain.entity.Content.ContentClass
 import kipsigman.domain.entity.ContentImage
+import kipsigman.domain.entity.ContentImage.DisplayType
 import kipsigman.domain.entity.Image
 import kipsigman.domain.repository.ImageRepository
 
@@ -64,6 +65,17 @@ class ImageRepositorySlick @Inject() (dbConfigProvider: DatabaseConfigProvider)(
   override def findContentImages(contentClass: ContentClass, contentId: Int): Future[Seq[ContentImage]] = {
     val q = contentImageQuery(contentClass).filter(_.contentId === contentId).sortBy(_.displayPosition)
     contentImageResults(q)
+  }
+  
+  override def findContentImages(contentClass: ContentClass, contentIds: Set[Int]): Future[Seq[ContentImage]] = {
+    val q = contentImageQuery(contentClass).filter(_.contentId.inSet(contentIds)).sortBy(ci => ci.contentId + ci.displayPosition)
+    contentImageResults(q)
+  }
+  
+  override def findContentImages(contentClass: ContentClass, contentIds: Set[Int], displayType: DisplayType): Future[Seq[ContentImage]] = {
+    findContentImages(contentClass, contentIds).map(contentImages => {
+      contentImages.filter(_.displayType == displayType)
+    })
   }
   
   override def saveContentImage(contentClass: ContentClass, entity: ContentImage): Future[ContentImage] = {
