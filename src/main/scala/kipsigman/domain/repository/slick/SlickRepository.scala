@@ -4,8 +4,10 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 import kipsigman.domain.entity.IdEntity
+import kipsigman.domain.entity.LifecycleEntity
 import kipsigman.domain.entity.Page
 import kipsigman.domain.entity.PageFilter
+import kipsigman.domain.entity.Status
 
 trait SlickRepository extends TableGroupConfig {
   import driver.api._
@@ -35,5 +37,13 @@ trait SlickRepository extends TableGroupConfig {
         Page(items, pageFilter, false)
       }
     })
+  }
+  
+  protected def filterNotDeleted[T <: LifecycleEntity[T]](entities: Seq[T]): Seq[T] = {
+    entities.filterNot(entity => entity.isDeleted)
+  }
+  
+  protected def filterNotDeleted[T <: LifecycleEntity[T]](entitiesFuture: Future[Seq[T]]): Future[Seq[T]] = {
+    entitiesFuture.map(entities => filterNotDeleted(entities))
   }
 }
