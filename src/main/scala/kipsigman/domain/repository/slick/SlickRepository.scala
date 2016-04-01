@@ -39,11 +39,11 @@ trait SlickRepository extends TableGroupConfig {
     })
   }
   
-  protected def filterNotDeleted[T <: LifecycleEntity[T]](entities: Seq[T]): Seq[T] = {
-    entities.filterNot(entity => entity.isDeleted)
+  protected def filterActive[T <: LifecycleEntity[T]](entities: Seq[T]): Seq[T] = {
+    entities.filter(entity => Status.activeValues.contains(entity.status))
   }
   
-  protected def filterNotDeleted[T <: LifecycleEntity[T]](entitiesFuture: Future[Seq[T]]): Future[Seq[T]] = {
-    entitiesFuture.map(entities => filterNotDeleted(entities))
+  protected def filterActive[T <: LifecycleEntity[T]](entitiesFuture: Future[Seq[T]]): Future[Seq[T]] = {
+    entitiesFuture.map(entities => filterActive(entities))
   }
 }
