@@ -5,6 +5,8 @@ import play.api.data.FormError
 import play.api.data.Forms
 import play.api.data.Forms._
 import play.api.data.Mapping
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import play.api.mvc.PathBindable
 import play.api.mvc.QueryStringBindable
 
@@ -21,6 +23,18 @@ case class Category(
 object Category {
   def sort(categories: Seq[Category]): Seq[Category] = categories.sortBy(c => (c.order, c.name))
   def sort(categories: Set[Category]): Seq[Category] = sort(categories.toSeq)
+  
+  implicit val reads: Reads[Category] = (
+    (JsPath \ "id").readNullable[Int] and
+    (JsPath \ "name").read[String] and
+    (JsPath \ "order").read[Int]
+  )(Category.apply _)
+  
+  implicit val writes: Writes[Category] = (
+    (JsPath \ "id").writeNullable[Int] and
+    (JsPath \ "name").write[String] and
+    (JsPath \ "order").write[Int]
+  )(unlift(Category.unapply))
 }
 
 /**

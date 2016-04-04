@@ -1,5 +1,7 @@
 package kipsigman.domain.entity
 
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import play.api.libs.MimeTypes
 
 /**
@@ -30,4 +32,20 @@ object Image {
   def filename(id: Int, fileExtension: String): String = s"${id}.${fileExtension}"
   
   def thumbnailFilename(id: Int, fileExtension: String): String = s"${id}-thumbnail.${fileExtension}"
+  
+  implicit val reads: Reads[Image] = (
+    (JsPath \ "id").readNullable[Int] and
+    (JsPath \ "mimeType").read[String] and
+    (JsPath \ "width").read[Int] and
+    (JsPath \ "height").read[Int] and
+    (JsPath \ "caption").readNullable[String]
+  )(Image.apply _)
+  
+  implicit val writes: Writes[Image] = (
+    (JsPath \ "id").writeNullable[Int] and
+    (JsPath \ "mimeType").write[String] and
+    (JsPath \ "width").write[Int] and
+    (JsPath \ "height").write[Int] and
+    (JsPath \ "caption").writeNullable[String]
+  )(unlift(Image.unapply))
 }

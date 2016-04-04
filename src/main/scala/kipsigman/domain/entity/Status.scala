@@ -1,5 +1,8 @@
 package kipsigman.domain.entity
 
+import play.api.data.validation.ValidationError
+import play.api.libs.json._
+
 abstract class Status(val name: String) {
   override def toString: String = name
 }
@@ -25,5 +28,16 @@ object Status {
       case Some(status) => status
       case None => throw new IllegalArgumentException(s"Invalid Status: $name")
     }
+  }
+  
+  implicit val reads: Reads[Status] = new Reads[Status] {
+    def reads(json: JsValue) = json match {
+      case JsString(s) => JsSuccess(Status(s))
+      case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.jsstring"))))
+    }
+  }
+  
+  implicit val writes: Writes[Status] = new Writes[Status] {
+    def writes(status: Status) = JsString(status.name)
   }
 }

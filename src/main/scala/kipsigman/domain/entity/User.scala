@@ -1,5 +1,11 @@
 package kipsigman.domain.entity
 
+import scala.annotation.implicitNotFound
+
+import play.api.data.validation.ValidationError
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+
 trait User extends IdEntity {
   def firstName: Option[String]
   def lastName: Option[String]
@@ -26,6 +32,27 @@ case class UserBasic(
   email: String,
   avatarURL: Option[String],
   roles: Set[Role] = Set(Role.Member)) extends User
+  
+object UserBasic {
+  implicit val reads: Reads[UserBasic] = (
+    (JsPath \ "id").readNullable[Int] and
+    (JsPath \ "firstName").readNullable[String] and
+    (JsPath \ "lastName").readNullable[String] and
+    (JsPath \ "email").read[String] and
+    (JsPath \ "avatarURL").readNullable[String] and
+    (JsPath \ "roles").read[Set[Role]]
+  )(UserBasic.apply _)
+  
+  implicit val writes: Writes[UserBasic] = (
+    (JsPath \ "id").writeNullable[Int] and
+    (JsPath \ "firstName").writeNullable[String] and
+    (JsPath \ "lastName").writeNullable[String] and
+    (JsPath \ "email").write[String] and
+    (JsPath \ "avatarURL").writeNullable[String] and
+    (JsPath \ "roles").write[Set[Role]]
+  )(unlift(UserBasic.unapply))
+  
+}
 
 sealed abstract class Role(val name: String) {
   override def toString: String = name
@@ -46,5 +73,16 @@ object Role {
       case Some(role) => role
       case None => throw new IllegalArgumentException(s"Invalid Role: $name")
     }
+  }
+  
+  implicit val reads: Reads[Role] = new Reads[Role] {
+    def reads(json: JsValue) = json match {
+      case JsString(s) => JsSuccess(Role(s))
+      case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.jsstring"))))
+    }
+  }
+  
+  implicit val writes: Writes[Role] = new Writes[Role] {
+    def writes(role: Role) = JsString(role.name)
   }
 }
