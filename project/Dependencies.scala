@@ -1,5 +1,5 @@
 import sbt._
 
 object Dependencies {
-  lazy val playVersion = "2.5.1"
+  lazy val playVersion = "2.5.3"
 }
