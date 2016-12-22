@@ -7,8 +7,8 @@ scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "2.0.2",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test",
-  "org.mockito" % "mockito-core" % "1.10.19" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "org.mockito" % "mockito-core" % "2.3.11" % "test"
 )
 
 dependencyOverrides += "com.typesafe.play" %% "play-jdbc-api" % playVersion
